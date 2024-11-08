@@ -7,19 +7,37 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             background-color: #f5f5f5;
             color: #333;
             margin: 0;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .navbar a {
+            text-decoration: none;
+            color: white;
+            background-color: #ff4500;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .navbar a:hover {
+            background-color: #e63900;
         }
         h1 {
             color: #ff4500;
         }
         .quiz-container {
             max-width: 600px;
+            width: 100%;
             background: white;
             padding: 20px;
             border-radius: 8px;
@@ -57,9 +75,19 @@
     </style>
 </head>
 <body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <a href="#more">More Quizzes</a>
+    </div>
+
     <div class="quiz-container">
         <h1>Cat Quiz</h1>
         <form id="quizForm">
+            <!-- Questions -->
             <div class="question">
                 <h2>1. What is the average lifespan of a domestic cat?</h2>
                 <label><input type="radio" name="q1" value="0"> 5-8 years</label>
@@ -81,7 +109,21 @@
                 <label><input type="radio" name="q3" value="0"> Puma</label>
                 <label><input type="radio" name="q3" value="0"> Lynx</label>
             </div>
+            <div class="question">
+                <h2>4. What is a group of kittens called?</h2>
+                <label><input type="radio" name="q4" value="1"> A kindle</label>
+                <label><input type="radio" name="q4" value="0"> A troop</label>
+                <label><input type="radio" name="q4" value="0"> A colony</label>
+                <label><input type="radio" name="q4" value="0"> A pack</label>
+            </div>
+            <div class="question">
+                <h2>5. True or False: All cats hate water.</h2>
+                <label><input type="radio" name="q5" value="0"> True</label>
+                <label><input type="radio" name="q5" value="1"> False</label>
+            </div>
+            <!-- Submit Button -->
             <button type="button" class="submit-btn" onclick="calculateScore()">Submit</button>
+            <!-- Result -->
             <div class="result" id="result"></div>
         </form>
     </div>
@@ -92,21 +134,34 @@
             const quizForm = document.getElementById('quizForm');
             const resultDiv = document.getElementById('result');
             
-            // Get all questions
-            const questions = ['q1', 'q2', 'q3'];
+            // Questions and feedback based on answers
+            const questions = [
+                {name: 'q1', correct: '12-15 years'},
+                {name: 'q2', correct: '18 toes'},
+                {name: 'q3', correct: 'Lion'},
+                {name: 'q4', correct: 'Kindle'},
+                {name: 'q5', correct: 'False (Some cats enjoy water!)'}
+            ];
 
-            // Check answers
-            questions.forEach(q => {
-                const answer = quizForm.elements[q].value;
-                if (answer) {
-                    score += parseInt(answer);
+            // Calculate score and gather feedback
+            let feedback = [];
+            questions.forEach((q, index) => {
+                const userAnswer = quizForm.elements[q.name].value;
+                if (userAnswer === "1") {
+                    score++;
+                    feedback.push(`Question ${index + 1}: Correct!`);
+                } else {
+                    feedback.push(`Question ${index + 1}: Incorrect. The correct answer is "${q.correct}".`);
                 }
             });
 
-            // Display result
-            resultDiv.innerHTML = `Your score is: ${score} / ${questions.length}`;
+            // Display result and personalized feedback
+            resultDiv.innerHTML = `
+                <p>Your score is: ${score} / ${questions.length}</p>
+                <p>${feedback.join('<br>')}</p>
+            `;
         }
     </script>
+
 </body>
 </html>
-
